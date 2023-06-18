@@ -1,6 +1,13 @@
 package com.example.weatherapp;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -18,14 +25,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Locale;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 
 public class MainActivity extends AppCompatActivity {
     EditText etcity, etcountry;
     TextView tvResult;
+    TextView location;
+    private LocationManager locationManager;
+    private int PERMISSION_CODE=1;
+    private String cityName;
     private final String url="https://api.openweathermap.org/data/2.5/weather";
             private final String appid="b2beb17abb1073e57447ace0f1614f6d";
             DecimalFormat df=new DecimalFormat("#.##");
@@ -37,14 +52,58 @@ public class MainActivity extends AppCompatActivity {
         etcity=findViewById(R.id.etcity);
         etcountry=findViewById(R.id.etcountry);
         tvResult=findViewById(R.id.tvResult);
+
+        location=findViewById(R.id.location);
+
+        locationManager=(LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,android. Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+           ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},PERMISSION_CODE);
+
+        }
+        Location location1=locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        cityName=getCityName(location1.getLongitude(),location1.getLatitude());
+       if(!cityName.equals("")){
+           location.setText(cityName);
+       }
+
     }
+
+    private String getCityName(double longitude,double latitude){
+        String cityName="Not Found";
+        Geocoder gcd=new Geocoder(getBaseContext(), Locale.getDefault());
+        try{
+            List<Address> addresses=gcd.getFromLocation(latitude,longitude,10);
+            for(Address adr:addresses){
+                if(adr!=null){
+                    String city=adr.getLocality();
+                    if(city!=null && !city.equals("")){
+                        cityName=city;
+                    }
+                    else{
+                        Toast.makeText(this,"User City NOt Found, Please manually type the city Name",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return cityName;
+    }
+
 
     public void getWeatherDetails(View view) {
         String tempurl="";
         String city= etcity.getText().toString().trim();
+        String lc=location.getText().toString().trim();
         String country=etcountry.getText().toString().trim();
-        if(city.equals("")){
-            tvResult.setText("City field can not be blank...");
+        if(!lc.equals("")){
+            if(!country.equals("")){
+                tempurl=url+"?q="+lc+ ","+country+ "&appid="+appid;
+            }
+            else{
+                tempurl=url+ "?q="+lc+"&appid="+ appid;
+            }
         }
         else{
             if(!country.equals("")){

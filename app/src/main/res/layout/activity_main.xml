@@ -22,6 +22,19 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="28dp"
+            android:id="@+id/location"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:ems="10"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:hint="Will fetch location"/>
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
