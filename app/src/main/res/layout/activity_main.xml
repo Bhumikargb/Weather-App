@@ -33,7 +33,8 @@
             android:ems="10"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:hint="Will fetch location"/>
+            android:hint="Will fetch location"
+            android:textColor="@color/black"/>
 
         <EditText
             android:layout_width="match_parent"
@@ -46,16 +47,7 @@
            android:textStyle="bold"
             android:inputType="textPersonName"/>
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/etcountry"
-            android:layout_marginBottom="10dp"
-            android:ems="10"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:hint="Enter Country Code (Optional).."
-            android:inputType="textPersonName"/>
+
 
         <Button
             android:layout_width="match_parent"
@@ -74,7 +66,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-
+            app:cardElevation="10dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardMaxElevation="12dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true"
             android:background="@color/white">
 
             <LinearLayout
@@ -87,8 +84,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Weather Description"
-                    android:textColor="#000"
-                    android:textSize="18sp" />
+                    android:textColor="@color/black"
+                    android:layout_gravity="bottom|center_horizontal"
+
+                    android:textSize="20sp"
+                    android:textAlignment="center"
+                    android:background="#FFDCC1B8" />
 
             </LinearLayout>
 
